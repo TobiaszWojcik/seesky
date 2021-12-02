@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    {% block head %}
+    {% include "styles.html" ignore missing %}
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} - Seesky</title>
+    {% endblock %}
+</head>
+<body>
+    <div id="conteiner" class="">
+        <div id="header" class="">
+            {% block header %}
+                {% include "header.html" ignore missing %}
+            {% endblock %}
+        </div>
+        <div id="nav" class="nav">
+            {% block navigate %}
+                {% include "navigate.html" ignore missing %}
+            {% endblock %}
+        </div>
+        <div id="content">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+        <div id="footer" class="footer">
+            {% block footer %}
+                {% include "footer.html" ignore missing %}
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>
+
+Copyright 2021 by <a href="nopage.pl">Tobiasz Wójcik</a>.

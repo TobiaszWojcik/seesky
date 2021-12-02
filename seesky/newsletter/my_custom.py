@@ -11,9 +11,11 @@ class NominatimGeocoding:
     def __str__(self):
         return str(self.geolocation_dict.get('display_name'))
 
-    def lat_long(self):
-        return [self.geolocation_dict['lat'],self.geolocation_dict['lon']]
+    def lat(self):
+        return self.geolocation_dict['lat']
 
+    def lon(self):
+        return self.geolocation_dict['lon']
 
 class CalkDistance:
     def __init__(self):
@@ -35,9 +37,3 @@ class CalkDistance:
         return distance
 
 
-zagorz = NominatimGeocoding("Zagórz")
-sanok = NominatimGeocoding("Sanok")
-
-print(zagorz.lat_long())
-kalk = CalkDistance()
-print(f'Odległość między \n{zagorz}\na\n{sanok} to {kalk.distance(zagorz.lat_long(),sanok.lat_long())} metrów')

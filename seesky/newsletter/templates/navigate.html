@@ -1,0 +1,10 @@
+<div id="nav" class="">
+    <ul class="nav nav-tabs">
+        {% for navi in pages %}
+            <li class="nav-item">
+            <a class="nav-link {{ navi.active }}" href="{{ navi.link }}">{{ navi.page }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+</div>
