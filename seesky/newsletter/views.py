@@ -6,15 +6,21 @@ pages = [
     {'active': ''}
 ]
 
-def show_page(request, place):
-
+def show_page(request):
+    if request.method == 'POST':
+        place = request.POST['place']
+    else:
+        place = ""
     place = NominatimGeocoding(place)
     context = {
         'title': 'Strona główna',
         'place': place,
     }
-    print(context)
-    return render(request, 'main.html', context)
+    if not place.error:
+        pass
+
+
+    return render(request, 'show.html', context)
 
 
 def newsletter_page(request):

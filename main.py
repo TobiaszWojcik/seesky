@@ -6,7 +6,11 @@ class NominatimGeocoding:
     def __init__(self, address):
         self.API_URL = 'https://nominatim.openstreetmap.org/search.php?q={}&format=json&limit=1'
         response = requests.get(self.API_URL.format(address))
-        self.geolocation_dict = response.json()[0]
+        if not response.text == '[]':
+            self.geolocation_dict = response.json()[0]
+            return True
+        else:
+            return False
 
     def __str__(self):
         return str(self.geolocation_dict.get('display_name'))
@@ -35,9 +39,5 @@ class CalkDistance:
         return distance
 
 
-zagorz = NominatimGeocoding("Zagórz")
-sanok = NominatimGeocoding("Sanok")
+zagorz = NominatimGeocoding("asdasdasd")
 
-print(zagorz.lat_long())
-kalk = CalkDistance()
-print(f'Odległość między \n{zagorz}\na\n{sanok} to {kalk.distance(zagorz.lat_long(),sanok.lat_long())} metrów')
