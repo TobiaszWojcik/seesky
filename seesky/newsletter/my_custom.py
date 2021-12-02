@@ -12,10 +12,10 @@ class NominatimGeocoding:
         return str(self.geolocation_dict.get('display_name'))
 
     def lat(self):
-        return self.geolocation_dict['lat']
+        return round(float(self.geolocation_dict['lat']), 6)
 
     def lon(self):
-        return self.geolocation_dict['lon']
+        return round(float(self.geolocation_dict['lon']), 6)
 
 class CalkDistance:
     def __init__(self):

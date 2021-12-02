@@ -6,11 +6,10 @@ pages = [
     {'active': ''}
 ]
 
-def main_page(request):
-    place = NominatimGeocoding("Zagórz")
+def show_page(request, place):
 
-    context ={
-
+    place = NominatimGeocoding(place)
+    context = {
         'title': 'Strona główna',
         'place': place,
     }
@@ -22,5 +21,5 @@ def newsletter_page(request):
     return HttpResponse('To jest strona g')
 
 
-def show_page(request, lat=0, long=0):
+def main_page(request,):
     return HttpResponse(f'Długość to {lat} a szerokość {long}')
