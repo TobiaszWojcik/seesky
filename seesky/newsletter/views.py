@@ -47,11 +47,3 @@ def actualizacja(request):
         else:
             context['content'] = 'Zaktualizuj obiekty latające'
     return render(request, 'actual.html', context)
-
-
-
-
-
-
-
-    return HttpResponse('Dane zostały zaktualizowane')
