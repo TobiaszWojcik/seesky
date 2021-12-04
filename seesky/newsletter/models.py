@@ -21,3 +21,8 @@ class SOPositions(models.Model):
     lon = models.DecimalField(max_digits=12, decimal_places=7)
     s0_id = models.ForeignKey(SpaceObjects, on_delete=models.CASCADE)
 
+class Positions(models.Model):
+    lat = models.DecimalField(max_digits=12, decimal_places=7)
+    lon = models.DecimalField(max_digits=12, decimal_places=7)
+    so_id = models.ForeignKey(SpaceObjects, on_delete=models.CASCADE)
+    time_s = models.DateTimeField()

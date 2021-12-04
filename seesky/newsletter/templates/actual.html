@@ -18,7 +18,14 @@
   <br>
   <div class="text-center container">
     {% if user.is_superuser %}
+
       {% include "act_form.html" %}
+      <br>
+      <h3>Aktualna lista:</h3>
+      {% for obj in objects%}
+        <p>{{ obj.name }} - {{ obj.short }}</p>
+      {% endfor %}
+
     {% endif %}
   </div>
 {% endblock %}

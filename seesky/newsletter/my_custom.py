@@ -1,6 +1,4 @@
-import math, requests, datetime
-import pytz
-from sscws.sscws import SscWs
+import math, requests
 
 
 class NominatimGeocoding:
@@ -22,6 +20,7 @@ class NominatimGeocoding:
     def lon(self):
         return round(float(self.geolocation_dict['lon']), 6)
 
+
 class CalkDistance:
     def __init__(self):
         self.EARTH_R = 6378137
@@ -40,30 +39,3 @@ class CalkDistance:
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
         distance = self.EARTH_R * c
         return distance
-
-
-class SpaceObjectTaker:
-    def __init__(self):
-        self.PATH = "https://sscweb.gsfc.nasa.gov/WS/sscr/2/observatories"
-        self.station_list_name = []
-        self.station_list_short = []
-        self.station_list_exp_time = []
-        self.station_list = []
-
-    def get_stations(self):
-        obserwatory = SscWs()
-        obserwatory.get_observatories()
-        obs = obserwatory.get_observatories()
-        if obs['HttpStatus'] == 200:
-            objects = obs['Observatory']
-            now = pytz.utc.localize(datetime.datetime.utcnow())
-            for row in objects:
-                time = row['EndTime']
-                if time > now:
-                    self.station_list_name.append(row['Name'])
-                    self.station_list_short.append(row['Id'])
-                    self.station_list_exp_time.append(time)
-                    self.station_list.append({'name': row['Name'], 'short': row['Id'], 'exp_time': time})
-            return True
-        else:
-            return False
