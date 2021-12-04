@@ -29,6 +29,9 @@
 {% endif %}
   <div class="text-center container">
     {% include "search_form.html" %}
+    {% for informacja in info %}
+      <p>{{ informacja }}</p>
+    {% endfor %}
   </div>
 {% endblock %}
 <!--Footer-->

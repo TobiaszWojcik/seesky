@@ -47,7 +47,7 @@ class SpaceObject:
         a = 0
         b = 40
         for sat in self.station_list_short:
-            sats_obj.append(SatelliteSpecification(sat, 30))
+            sats_obj.append(SatelliteSpecification(sat, 5))
 
         while status:
 

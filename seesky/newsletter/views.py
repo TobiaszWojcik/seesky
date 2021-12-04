@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .my_custom import NominatimGeocoding
+from .my_custom import NominatimGeocoding, CalkDistance
 from .satelite import SpaceObject
 from .models import SpaceObjects, Positions
 
@@ -12,12 +12,23 @@ def show_page(request):
     else:
         place = ""
     place = NominatimGeocoding(place)
+    calk = CalkDistance()
+    info = []
+    if not place.error:
+        for obj in Positions.objects.all():
+            wynik = calk.distance([place.lat(), place.lon()], [obj.lat, obj.lon])
+            if wynik < 1000:
+                info.append(f'{obj.so_id} będzie w odległości {wynik}km ok godziny {obj.time_s}')
+        print('wykonało')
+
     context = {
         'title': 'Strona główna',
         'place': place,
+        'info': info
     }
     if not place.error:
         pass
+
 
     return render(request, 'show.html', context)
 

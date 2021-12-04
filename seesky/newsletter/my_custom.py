@@ -37,5 +37,4 @@ class CalkDistance:
             math.cos(math.radians(lat_a)) * math.cos(math.radians(lat_b)) *\
             math.sin(d_long / 2) * math.sin(d_long / 2)
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-        distance = self.EARTH_R * c
-        return distance
+        return int((self.EARTH_R * c)/1000)
