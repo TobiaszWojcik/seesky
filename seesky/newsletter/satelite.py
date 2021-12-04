@@ -67,20 +67,12 @@ class SpaceObject:
                     res_lon = obj.get('Coordinates')[0].get('Longitude')
                     res_time = obj.get('Time')
                     for ix in range(0, (len(res_time))):
-                        self.positions.append([res_id, res_lat[ix], res_lon[ix], res_time[ix]])
-                        print(res_id, res_lat[ix], res_lon[ix], res_time[ix])
-
+                        self.positions.append(
+                            {'so_id': res_id,
+                             'lat': res_lat[ix],
+                             'lon': res_lon[ix],
+                             'time_s': res_time[ix]})
             else:
                 return False
         else:
             return True
-
-
-so = SpaceObject()
-if so.get_stations():
-    if so.get_location():
-        print('udało się')
-    else:
-        print('nie udało się pobrać pozycji')
-else:
-    print('nie udało się pobrać stacji')

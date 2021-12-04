@@ -15,7 +15,6 @@ class Newsletter(models.Model):
 class SpaceObjects(models.Model):
     name = models.CharField(max_length=255)
     short = models.CharField(max_length=20)
-    exp_time = models.DateTimeField()
 
 
 class Positions(models.Model):
