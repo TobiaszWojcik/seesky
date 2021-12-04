@@ -34,25 +34,29 @@ def show_page(request):
 
 
 def newsletter_page(request):
-    return HttpResponse('To jest strona g')
+    return HttpResponse('Strona w budowie')
 
 
 def main_page(request):
-    return HttpResponse(f'Długość to ')
+    context = {
+        'title': 'Strona główna'
+    }
+
+    return render(request, 'main.html', context)
 
 
 def actualizacja(request):
 
     context = {
         'title': 'Aktualizacja obiektów kosmicznych',
-        'content': 'Nie masz uprawnień dla tej strony'
+        'content': 'Aktualna lista obserwowanych satelit:'
     }
+
+    sobj = SpaceObjects.objects.all()
+    context['objects'] = sobj
+
     if request.user.is_superuser:
-        sobj = SpaceObjects.objects.all()
-        context['objects'] = sobj
         if request.method == 'POST':
-
-
             sot = SpaceObject()
             if sot.get_stations():
                 SpaceObjects.objects.all().delete()
