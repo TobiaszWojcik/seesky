@@ -6,5 +6,4 @@ urlpatterns = [
     path('newsletter/', views.newsletter_page),
     path('show/', views.show_page),
     path('lista/', views.actualizacja),
-
 ]

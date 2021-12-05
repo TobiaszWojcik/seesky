@@ -5,7 +5,6 @@ from .satelite import SpaceObject
 from .models import SpaceObjects, Positions
 
 
-
 def show_page(request):
     if request.method == 'POST':
         place = request.POST['place']
@@ -16,9 +15,11 @@ def show_page(request):
     info = []
     if not place.error:
         for obj in Positions.objects.all():
-            wynik = calk.distance([place.lat(), place.lon()], [obj.lat, obj.lon])
+            wynik = calk.distance(place.lat(), place.lon(), obj.lat, obj.lon)
+            kierunek = calk.direction(place.lat(), place.lon(), obj.lat, obj.lon)
             if wynik < 1000:
-                info.append(f'{obj.so_id} będzie w odległości {wynik}km ok godziny {obj.time_s}')
+                info.append(f'{obj.so_id} będzie w odległości {wynik}km ok godziny {obj.time_s}.'
+                            f' Bedzie od ciebie w kierunku {kierunek[1]}({kierunek[0]}°)')
         print('wykonało')
 
     context = {
@@ -28,7 +29,6 @@ def show_page(request):
     }
     if not place.error:
         pass
-
 
     return render(request, 'show.html', context)
 
@@ -69,7 +69,12 @@ def actualizacja(request):
                     for row in sot.positions:
                         if temp_short != row.get('so_id'):
                             obj = SpaceObjects.objects.get(short=row.get('so_id'))
-                        Positions.objects.create(so_id=obj, lat=row.get('lat'), lon=row.get('lon'), time_s=row.get('time_s'))
+                        Positions.objects.create(
+                                so_id=obj,
+                                lat=row.get('lat'),
+                                lon=row.get('lon'),
+                                time_s=row.get('time_s')
+                                )
 
                     context['content'] = 'Zaktualizowano listę obiektów i pozyje obiektów kosmicznych'
 
