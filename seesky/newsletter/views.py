@@ -14,13 +14,21 @@ def show_page(request):
     calk = CalkDistance()
     info = []
     if not place.error:
+        temp_so_id = None
+        ind = 1
         for obj in Positions.objects.all():
             wynik = calk.distance(place.lat(), place.lon(), obj.lat, obj.lon)
             kierunek = calk.direction(place.lat(), place.lon(), obj.lat, obj.lon)
             if wynik < 1000:
-                info.append(f'{obj.so_id} będzie w odległości {wynik}km ok godziny {obj.time_s}.'
-                            f' Bedzie od ciebie w kierunku {kierunek[1]}({kierunek[0]}°)')
-        print('wykonało')
+                temp_info = f'{obj.so_id} będzie w kierunku {kierunek[1]}({kierunek[0]}°) w odległości {wynik}' \
+                            f'km ok godziny {obj.time_s}.'
+
+                temp_speed = calk.distance(temp_lat, temp_long, obj.lat, obj.lon)/5
+                temp_dir = calk.direction(temp_lat, temp_long, obj.lat, obj.lon)
+                temp_info += f'Obiekt porusza się z prędkością {temp_speed}km/m w kierunku {temp_dir[1]}({temp_dir[0]}°)'
+                info.append(temp_info)
+            temp_lat = obj.lat
+            temp_long = obj.lon
 
     context = {
         'title': 'Strona główna',
