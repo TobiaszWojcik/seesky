@@ -23,8 +23,8 @@ class SpaceObjects(models.Model):
 class Positions(models.Model):
     lat = models.DecimalField(max_digits=12, decimal_places=7)
     lon = models.DecimalField(max_digits=12, decimal_places=7)
-    so_id = models.ForeignKey(SpaceObjects, on_delete=models.CASCADE)
-    time_s = models.DateTimeField()
+    short = models.CharField(max_length=100, default='null')
+    time = models.DateTimeField()
 
     def __str__(self):
-        return f'{self.so_id} - {self.lat},{self.lon}'
+        return f'{self.short} - {self.lat} - {self.lon} - {self.time}'
