@@ -44,8 +44,10 @@ def show_page(request):
                     if is_betwen(temp_long, lon, temp_y):
                         wynik = calk.distance(place.lat(), place.lon(), temp_x, temp_y)
                         kierunek = calk.direction(place.lat(), place.lon(), temp_x, temp_y)
-                        info.append(f'{obj.short} - odległość najbliższa {wynik} w kierunku {kierunek} {obj.time}')
-
+                        info.append(f'{ind}.{obj.short} - odległość najbliższa {wynik} w kierunku {kierunek} {obj.time}')
+                        ind += 1
+            else:
+                ind = 1
             temp_short = obj.short
             temp_lat = lat
             temp_long = lon
