@@ -9,12 +9,11 @@ from sscws.coordinates import CoordinateSystem, CoordinateComponent
 
 class SpaceObject:
     def __init__(self):
-        self.PATH = "https://sscweb.gsfc.nasa.gov/WS/sscr/2/observatories"
         self.station_list_short = []
         self.station_list = []
         self.positions = []
         self.space_class = SscWs
-        self.period = 5  # czas odstępu pomiędzy pomiarami satelit w minutach
+        self.period = 1  # czas odstępu pomiędzy pomiarami satelit w minutach
 
 # Metoda pobiera informację o satelitach i zwraca tylko te które aktualnie w kosmosie
 
@@ -76,6 +75,7 @@ class SpaceObject:
                     res_id = obj.get('Id')
                     res_lat = obj.get('Coordinates')[0].get('Latitude')
                     res_lon = obj.get('Coordinates')[0].get('Longitude')
+
                     res_time = obj.get('Time')
                     for ix in range(0, (len(res_time))):
                         self.positions.append(

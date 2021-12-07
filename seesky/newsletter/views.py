@@ -1,16 +1,11 @@
+from math import fabs
 from django.shortcuts import render
 from django.http import HttpResponse
-from .my_custom import NominatimGeocoding, CalkDistance
+from .map_finder import NominatimGeocoding
+from .custom_calculations import Calculate
 from .satelite import SpaceObject
 from .models import SpaceObjects, Positions
 
-
-def is_betwen(min,max,betwen):
-    if max > min:
-        if min < betwen < max:
-            return True
-    else:
-        return False
 
 def show_page(request):
     if request.method == 'POST':
@@ -18,53 +13,60 @@ def show_page(request):
     else:
         place = ""
     place = NominatimGeocoding(place)
-    calk = CalkDistance()
+    calc = Calculate()
     info = []
     if not place.error:
         temp_short = None
-        ind = 1
+        satind = 1
         for obj in Positions.objects.all():
-            lon = float(obj.lon)
-            lat = float(obj.lat)
-            print(ind)
-            ind += 1
+            p_lon, p_lat, o_lon, o_lat = calc.prepare(place.lon(), place.lat(), obj.lon, obj.lat)
             if temp_short and temp_short == obj.short:
-                f_a = (temp_long - lon)/(temp_lat - lat)
-                f_b = temp_long - (f_a*temp_lat)
+                if (t_lon * o_lon) < 0 and fabs(t_lon - o_lon) > 270:
+                    if t_lon < o_lon:
+                        t_lon += 360
+                    else:
+                        t_lon -= 360
+                tt_lat = t_lat - o_lat
+
+                if tt_lat == 0:
+                    tt_lat = 0.00000000001
+                f_a = (t_lon - o_lon)/tt_lat
+                f_b = t_lon - (f_a*t_lat)
                 if f_a == 0:
-                    f_a = 0.000000001
+                    f_a = 0.00000000001
                 d_a = -1/f_a
-                d_b = place.lon()-(d_a*place.lat())
-                temp_x = (d_b-f_b)/(f_a-d_a)
-                temp_y = f_a * temp_x + f_b
-                # wynik = calk.distance(place.lat(), place.lon(), temp_x, temp_y)
-                # kierunek = calk.direction(place.lat(), place.lon(), temp_x, temp_y)
-                # info.append(f'Odległość najbliższa {wynik} w kierunku {kierunek}')
-                if is_betwen (temp_lat, lat, temp_x):
-                    if is_betwen(temp_long, lon, temp_y):
-                        wynik = calk.distance(place.lat(), place.lon(), temp_x, temp_y)
-                        kierunek = calk.direction(place.lat(), place.lon(), temp_x, temp_y)
-                        info.append(f'{ind}.{obj.short} - odległość najbliższa {wynik} w kierunku {kierunek} {obj.time}')
-                        ind += 1
-            else:
-                ind = 1
+                d_b = p_lon-(d_a*p_lat)
+                x_lat = (d_b-f_b)/(f_a-d_a)
+                x_lon = f_a * x_lat + f_b
+                if calc.is_betwen(t_lat, o_lat, x_lat):
+                    if calc.is_betwen(t_lon, o_lon, x_lon):
+                        distance = calc.distance(p_lat, p_lon, x_lat, x_lon)
+                        if distance < 1000:
+                            observation_dir = calc.direction(p_lat, p_lon, x_lat, x_lon)
+                            travel_dir = calc.direction(o_lat, o_lon, t_lat, t_lon)
+                            obj_speed = calc.distance(o_lat, o_lon, t_lat, t_lon)
+
+                            info.append(f'{satind}.{obj.short} - odległość najbliższa {distance} - w kierunku '
+                                        f'{observation_dir}° {obj.time} Kierunek {travel_dir}° Prędkość {obj_speed}')
+                            satind += 1
+
             temp_short = obj.short
-            temp_lat = lat
-            temp_long = lon
-            temp_time = obj.time
-            # wynik = calk.distance(place.lat(), place.lon(), obj.lat, obj.lon)
-            # kierunek = calk.direction(place.lat(), place.lon(), obj.lat, obj.lon)
+            t_lat = o_lat
+            t_lon = o_lon
+            # temp_time = obj.time
+            # distance = calc.distance(place.lat(), place.lon(), obj.lat, obj.lon)
+            # kierunek = calc.direction(place.lat(), place.lon(), obj.lat, obj.lon)
             #
             #
-            # if wynik < 2000:
-            #     temp_info = f'{obj.short} będzie w kierunku {kierunek[1]}({kierunek[0]}°) w odległości {wynik}' \
+            # if distance < 2000:
+            #     temp_info = f'{obj.short} będzie w kierunku {kierunek[1]}({kierunek[0]}°) w odległości {distance}' \
             #                 f'km ok godziny {obj.time}.'
             #
-            #     temp_speed = calk.distance(temp_lat, temp_long, obj.lat, obj.lon)/5
-            #     temp_dir = calk.direction(temp_lat, temp_long, obj.lat, obj.lon)
-            #     temp_info += f'Obiekt porusza się z prędkością {temp_speed}km/m w kierunku {temp_dir[1]}({temp_dir[0]}°)'
+            #     temp_speed = calc.distance(temp_lat, temp_long, obj.lat, obj.lon)/5
+            #     temp_dir = calc.direction(temp_lat, temp_long, obj.lat, obj.lon)
+            #     temp_info += f'Obiekt porusza się z prędkością {temp_speed}km/m w kierunku
+            #     {temp_dir[1]}({temp_dir[0]}°)'
             #     info.append(temp_info)
-
 
     context = {
         'title': 'Strona główna',
