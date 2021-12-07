@@ -5,6 +5,7 @@ from .map_finder import NominatimGeocoding
 from .custom_calculations import Calculate
 from .satelite import SpaceObject
 from .models import SpaceObjects, Positions
+from .sunset_sunrise import SunsetSunrise
 
 
 def show_page(request):
@@ -15,19 +16,46 @@ def show_page(request):
     place = NominatimGeocoding(place)
     calc = Calculate()
     info = []
+    sunset = None
+    sunrise = None
     if not place.error:
+        sun_action = SunsetSunrise()
+        temp_id = 0
         temp_short = None
+        max_delat = 15
         satind = 1
-        for obj in Positions.objects.all():
+        sunset, sunrise = sun_action.rise_set(place.lat(), place.lon())
+        max_lat = place.lat() + max_delat
+        min_lat = place.lat() - max_delat
+        max_lon = place.lon() + max_delat
+        if max_lon < 0:
+            max_lon = max_lon + 360
+        min_lon = place.lon() - max_delat
+        if min_lon < 0:
+            min_lon = min_lon + 360
+        if min_lon > max_lon:
+            objs = Positions.objects.filter(time__gte=sunset,
+                                            time__lte=sunrise,
+                                            lat__gte=min_lat,
+                                            lat__lte=max_lat) \
+                    & Positions.objects.exclude(lon__gte=min_lon,
+                                                lon__lte=max_lon)
+        else:
+            objs = Positions.objects.filter(time__gte=sunset,
+                                            time__lte=sunrise,
+                                            lat__gte=min_lat,
+                                            lat__lte=max_lat,
+                                            lon__gte=min_lon,
+                                            lon__lte=max_lon)
+        for obj in objs:
             p_lon, p_lat, o_lon, o_lat = calc.prepare(place.lon(), place.lat(), obj.lon, obj.lat)
-            if temp_short and temp_short == obj.short:
+            if temp_short and temp_short == obj.short and temp_id + 1 == obj.id:
                 if (t_lon * o_lon) < 0 and fabs(t_lon - o_lon) > 270:
                     if t_lon < o_lon:
                         t_lon += 360
                     else:
                         t_lon -= 360
                 tt_lat = t_lat - o_lat
-
                 if tt_lat == 0:
                     tt_lat = 0.00000000001
                 f_a = (t_lon - o_lon)/tt_lat
@@ -45,33 +73,26 @@ def show_page(request):
                             observation_dir = calc.direction(p_lat, p_lon, x_lat, x_lon)
                             travel_dir = calc.direction(o_lat, o_lon, t_lat, t_lon)
                             obj_speed = calc.distance(o_lat, o_lon, t_lat, t_lon)
+                            info.append({
+                                'observation_dir': observation_dir,
+                                'obj_dir': travel_dir,
+                                'obj_speed': obj_speed,
+                                'obj_short': temp_short,
+                                'obj_time': obj.time,
+                            })
 
-                            info.append(f'{satind}.{obj.short} - odległość najbliższa {distance} - w kierunku '
-                                        f'{observation_dir}° {obj.time} Kierunek {travel_dir}° Prędkość {obj_speed}')
                             satind += 1
-
-            temp_short = obj.short
+            else:
+                temp_short = obj.short
+            temp_id = obj.id
             t_lat = o_lat
             t_lon = o_lon
-            # temp_time = obj.time
-            # distance = calc.distance(place.lat(), place.lon(), obj.lat, obj.lon)
-            # kierunek = calc.direction(place.lat(), place.lon(), obj.lat, obj.lon)
-            #
-            #
-            # if distance < 2000:
-            #     temp_info = f'{obj.short} będzie w kierunku {kierunek[1]}({kierunek[0]}°) w odległości {distance}' \
-            #                 f'km ok godziny {obj.time}.'
-            #
-            #     temp_speed = calc.distance(temp_lat, temp_long, obj.lat, obj.lon)/5
-            #     temp_dir = calc.direction(temp_lat, temp_long, obj.lat, obj.lon)
-            #     temp_info += f'Obiekt porusza się z prędkością {temp_speed}km/m w kierunku
-            #     {temp_dir[1]}({temp_dir[0]}°)'
-            #     info.append(temp_info)
-
     context = {
-        'title': 'Strona główna',
+        'title': 'Obiekty w okolicy',
         'place': place,
-        'info': info
+        'info': info,
+        'sunset': sunset,
+        'sunrise': sunrise,
     }
     if not place.error:
         pass
