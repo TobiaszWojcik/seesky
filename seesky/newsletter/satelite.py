@@ -5,7 +5,9 @@ from sscws.request import DataRequest, SatelliteSpecification
 from sscws.timeinterval import TimeInterval
 from sscws.outputoptions import OutputOptions, FilteredCoordinateOptions
 from sscws.coordinates import CoordinateSystem, CoordinateComponent
-
+from .models import Positions
+from .custom_calculations import Calculate
+from math import fabs
 
 class SpaceObject:
     def __init__(self):
@@ -38,7 +40,7 @@ class SpaceObject:
         ssc = self.space_class()
 
         today = datetime.date.strftime(datetime.date.today(), '%Y%m%dT120000Z')
-        tomorrow = datetime.date.strftime(datetime.date.today() + datetime.timedelta(days=1), '%Y%m%dT120000Z')
+        tomorrow = datetime.date.strftime(datetime.date.today() + datetime.timedelta(days=2), '%Y%m%dT120000Z')
 
         coord_options = [
                 FilteredCoordinateOptions(CoordinateSystem.GEO, CoordinateComponent.LAT),
@@ -87,3 +89,89 @@ class SpaceObject:
                 return False
         else:
             return True
+
+
+class SpaceDB:
+    def __init__(self, p_lat, p_lon, search_range=300, max_delat=15):
+        self.max_delat = max_delat
+        self.p_lat = float(p_lat)
+        self.p_lon = float(p_lon)
+        self.range = search_range
+        self.info = []
+
+    def get_info(self, sunset, sunrise):
+        calc = Calculate()
+        temp_id = 0
+        temp_short = None
+        satind = 1
+        max_lat = self.p_lat + self.max_delat
+        min_lat = self.p_lat - self.max_delat
+        max_lon = self.p_lon + self.max_delat
+        t_lat = None
+        t_lon = None
+        if max_lon < 0:
+            max_lon = max_lon + 360
+        min_lon = self.p_lon - self.max_delat
+        if min_lon < 0:
+            min_lon = min_lon + 360
+        if min_lon > max_lon:
+            objs = Positions.objects.filter(time__gte=sunset,
+                                            time__lte=sunrise,
+                                            lat__gte=min_lat,
+                                            lat__lte=max_lat) \
+                   & Positions.objects.exclude(lon__gte=min_lon,
+                                               lon__lte=max_lon)
+        else:
+            objs = Positions.objects.filter(time__gte=sunset,
+                                            time__lte=sunrise,
+                                            lat__gte=min_lat,
+                                            lat__lte=max_lat,
+                                            lon__gte=min_lon,
+                                            lon__lte=max_lon)
+        for obj in objs:
+            p_lon, p_lat, o_lon, o_lat = calc.prepare(self.p_lon, self.p_lat, obj.lon, obj.lat)
+            if temp_short and temp_short == obj.short and temp_id + 1 == obj.id:
+                if (t_lon * o_lon) < 0 and fabs(t_lon - o_lon) > 270:
+                    if t_lon < o_lon:
+                        t_lon += 360
+                    else:
+                        t_lon -= 360
+                tt_lat = t_lat - o_lat
+                if tt_lat == 0:
+                    tt_lat = 0.00000000001
+                # Wyznaczanie parametrów funkcji liniowej y = f_ax+f_b
+                f_a = (t_lon - o_lon) / tt_lat
+                f_b = t_lon - (f_a * t_lat)
+                if f_a == 0:
+                    f_a = 0.00000000001
+                # wyznaczanie parametrów funkcji liniowej prostopadłej do poprzedniej funkcji (najbliższy punkt)
+                d_a = -1 / f_a
+                d_b = p_lon - (d_a * p_lat)
+                # współrzędne najbliższej odległości od trajektorii obiektu do punktu
+                x_lat = (d_b - f_b) / (f_a - d_a)
+                x_lon = f_a * x_lat + f_b
+                # jaśli najbliższy pkt leży pomiędzy odczytami to wykonaj...
+                if calc.is_betwen(t_lat, o_lat, x_lat):
+                    if calc.is_betwen(t_lon, o_lon, x_lon):
+                        obj_dist = calc.distance(p_lat, p_lon, x_lat, x_lon)
+                        # jeśli odległość najbliższa od punktu mniejsza niż ...
+                        if obj_dist < 150:
+                            observation_dir = calc.direction(p_lat, p_lon, x_lat, x_lon)
+                            travel_dir = calc.direction(o_lat, o_lon, t_lat, t_lon)
+                            obj_speed = calc.distance(o_lat, o_lon, t_lat, t_lon)
+                            self.info.append({
+                                'observation_dir': observation_dir,
+                                'obj_dir': travel_dir,
+                                'obj_speed': obj_speed,
+                                'obj_short': temp_short,
+                                'obj_time': obj.time,
+                                'obj_dist': obj_dist
+                            })
+
+                            satind += 1
+            else:
+                temp_short = obj.short
+            temp_id = obj.id
+            t_lat = o_lat
+            t_lon = o_lon
+        return self.info

@@ -19,23 +19,27 @@
   <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d41438.69203622493!2d{{ place.lon }}!3d{{ place.lat }}!3m2!1i1024!2i768!4f5.1!5e0!3m2!1spl!2spl!4v1638465981061!5m2!1spl!2spl" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
   </div>
   <div class="container">
-    <h3 class="text-center">Podana lokalizacja:<br>{{ place }}</h3>
+    <div class="text-center">
+      <h4>Podana lokalizacja:</h4>
+      <h3>{{ place }}</h3>
+    </div>
+
     <br>
-    <div class="row">
-      <div class="col-6">
+    <div class="row text-center">
+      <div class="col-4">
+        <h4>Zachód słońca</h4>
+        <img class="image_s" src="{% static 'sunset.png' %}" alt="Image"/>
+        <p><b>{{ sunset }}</b></p>
+      </div>
+      <div class="col-4">
+        <img class="image_s" src="{% static 'globe.png' %}" alt="Image"/>
+        <br>
         <h4 class="text-center">Latitude: {{ place.lat }}<br>Longitude: {{ place.lon }}</h4>
       </div>
-      <div class="col-6">
-        <div class="row text-center">
-          <div class="col">
-            <img class="" src="{% static 'sunset.png' %}" alt="Image"/>
-            <p><b>{{ sunset }}</b></p>
-          </div>
-          <div class="col">
-            <img class="" src="{% static 'sunrise.png' %}" alt="Image"/>
-            <p><b>{{ sunrise }}</b></p>
-          </div>
-        </div>
+      <div class="col-4">
+        <h4>Wschód słońca</h4>
+        <img class="image_s" src="{% static 'sunrise.png' %}" alt="Image"/>
+        <p><b>{{ sunrise }}</b></p>
       </div>
     </div>
   </div>
