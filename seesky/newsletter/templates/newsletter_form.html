@@ -1,0 +1,28 @@
+<form action="" method="post">{% csrf_token %}
+  <div class="input-group input-group-lg">
+    <span class="input-group-text">Nazwa miejsca:</span>
+    <input type="text" class="form-control form-control-lg" name="place_name" disabled value="{{ place }}" placeholder="{{ place }}">
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-6">
+      <div class="input-group input-group-lg">
+        <span class="input-group-text">Szerokość Geograficzna:</span>
+        <input type="text" class="form-control form-control-lg" name="lat" disabled value="{{ lat }}" placeholder="{{ lat }}">
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="input-group input-group-lg">
+        <span class="input-group-text">Długość geograficzna:</span>
+        <input type="text" class="form-control form-control-lg" name="lon" disabled placeholder="{{ lon }}" value="{{ lon }}">
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="input-group input-group-lg">
+    <span class="input-group-text" >Twoje dane:</span>
+    <input type="text" class="form-control form-control-lg" name="name" placeholder="imię i nazwisko">
+    <input type="text" required class="form-control form-control-lg" name="email" placeholder="twój e-mail">
+    <button class="btn btn-success btn-lg" type="submit">Zapisz</button>
+  </div>
+</form>

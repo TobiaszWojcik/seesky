@@ -5,9 +5,9 @@ from django.http import HttpResponse
 from .map_finder import NominatimGeocoding
 from .satelite import SpaceObject, SpaceDB
 from .models import SpaceObjects, Positions
+from .forms import NewsletterForm
 
-
-def show_page(request):
+def main_page(request):
     if request.method == 'POST':
         place = request.POST['place']
     else:
@@ -30,15 +30,25 @@ def show_page(request):
 
 
 def newsletter_page(request):
-    return HttpResponse('Strona w budowie')
-
-
-def main_page(request):
     context = {
-        'title': 'Strona główna'
+        'error': True,
+        'error_text': None,
+        'title': 'Zapisz się na Newsletter'
     }
+    if request.method == 'POST':
+        if request.POST.get('place'):
+            place = request.POST['place']
+            place = NominatimGeocoding(place)
+            if not place.error:
+                context['error'] = False
+                context['lon'] = place.lon()
+                context['lat'] = place.lat()
+                context['place'] = str(place)
+            else:
+                context['error_text'] = 'Niestety nie znaleziono takiego miejsca'
 
-    return render(request, 'main.html', context)
+
+    return render(request, 'newsletter.html', context)
 
 
 def actualizacja(request):

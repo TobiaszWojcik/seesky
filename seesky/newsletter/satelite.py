@@ -166,6 +166,7 @@ class SpaceDB:
                                 'obj_short': temp_short,
                                 'obj_time': obj.time,
                                 'obj_dist': obj_dist
+
                             })
 
                             satind += 1
