@@ -30,17 +30,17 @@
       <div class="col-4">
         <h4>Zachód słońca</h4>
         <img class="image_s" src="{% static 'sunset.png' %}" alt="Image"/>
-        <p><b>{{ sunset }}</b></p>
+        <p class="fs-4"><b>{{ sunset }}</b></p>
       </div>
       <div class="col-4">
         <img class="image_s" src="{% static 'globe.png' %}" alt="Image"/>
         <br>
-        <h4 class="text-center">Latitude: {{ place.lat }}<br>Longitude: {{ place.lon }}</h4>
+        <p class="fs-4 text-center">Latitude: {{ place.lat }}<br>Longitude: {{ place.lon }}</p>
       </div>
       <div class="col-4">
         <h4>Wschód słońca</h4>
         <img class="image_s" src="{% static 'sunrise.png' %}" alt="Image"/>
-        <p><b>{{ sunrise }}</b></p>
+        <p class="fs-4"><b>{{ sunrise }}</b></p>
       </div>
     </div>
   </div>
@@ -52,7 +52,17 @@
   <div class="text-center container">
     {% include "search_form.html" %}
     {% for informacja in info %}
-      <p>{{ informacja }}</p>
+    <p class="fs-4 pt-4">
+      Obiekt <b>{{ informacja.obj_short }}</b> poruszający się w kierunku
+      <b>{{ informacja.obj_dir }} ({{ informacja.obj_dir_angle }}°)</b> z prędkością
+      <b>{{ informacja.obj_speed }}km/min</b>
+      <img src="{% static 'obj_tr.png' %}" class="icon_s" style="transform:rotate({{ informacja.obj_dir_angle }}deg)">
+      <br>
+      Najbliżej Ciebie obiekt będzie o <b>{{ informacja.obj_time }}</b>(UTC) w kierunku <b>{{ informacja.observation_dir }} ({{ informacja.observation_dir_angle }}°)</b>
+      w odległości <b>{{ informacja.obj_dist }}km</b>
+
+        <img src="{% static 'obj_view.png' %}" class="icon_s" style="transform:rotate({{ informacja.observation_dir_angle }}deg)">
+      </p>
     {% endfor %}
   </div>
 {% endblock %}

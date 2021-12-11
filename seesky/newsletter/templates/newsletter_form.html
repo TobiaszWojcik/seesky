@@ -1,28 +1,53 @@
-<form action="" method="post">{% csrf_token %}
+<form action="" method="post" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">{% csrf_token %}
   <div class="input-group input-group-lg">
     <span class="input-group-text">Nazwa miejsca:</span>
-    <input type="text" class="form-control form-control-lg" name="place_name" disabled value="{{ place }}" placeholder="{{ place }}">
+    <input type="text" class="form-control form-control-lg"  disabled value="{{ place }}" placeholder="{{ place }}">
   </div>
   <br>
   <div class="row">
+
     <div class="col-6">
       <div class="input-group input-group-lg">
         <span class="input-group-text">Szerokość Geograficzna:</span>
-        <input type="text" class="form-control form-control-lg" name="lat" disabled value="{{ lat }}" placeholder="{{ lat }}">
+        <input type="text" class="form-control form-control-lg"  disabled value="{{ lat }}" placeholder="{{ lat }}">
+      </div>
+      <br>
+      <div class="input-group input-group-lg">
+        <span class="input-group-text">Długość geograficzna:</span>
+        <input type="text" class="form-control form-control-lg"  disabled placeholder="{{ lon }}" value="{{ lon }}">
+      </div>
+      <br>
+      <div class="input-group input-group-lg">
+        <span class="input-group-text" >Nazwa:</span>
+        <input type="text" required class="form-control form-control-lg" name="name"
+               {% if name %}
+               value="{{ name }}"
+               {% endif %}
+               placeholder="imię i nazwisko">
+      </div>
+      <br>
+      <div class="input-group input-group-lg">
+        <span class="input-group-text" >E-mail:</span>
+        <input type="text" required class="form-control form-control-lg" name="email"
+               {% if email %}
+               value="{{ email }}"
+               {% endif %}
+               placeholder="twój e-mail">
+      </div>
+      <br>
+      <div class="input-group input-group-lg">
+        <span class="input-group-text" >Godzina otrzymywania newslettera:</span>
+        <input type="hidden" name="place_name" value="{{ place }}" >
+        <input type="hidden" name="lat" value="{{ lat }}">
+        <input type="hidden" name="lon" value="{{ lon }}">
+        <input type="time" class="form-control form-control-lg" name="time" step="3600" value = 17:00>
+        <button class="btn btn-success btn-lg" type="submit">Zapisz</button>
       </div>
     </div>
     <div class="col-6">
-      <div class="input-group input-group-lg">
-        <span class="input-group-text">Długość geograficzna:</span>
-        <input type="text" class="form-control form-control-lg" name="lon" disabled placeholder="{{ lon }}" value="{{ lon }}">
-      </div>
+
+      <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d41438.69203622493!2d{{ lon }}!3d{{ lat }}!3m2!1i1024!2i768!4f5.1!5e0!3m2!1spl!2spl!4v1638465981061!5m2!1spl!2spl" width="100%" height="100%" style="border:1;" allowfullscreen="" loading="lazy"></iframe>
+
     </div>
-  </div>
-  <br>
-  <div class="input-group input-group-lg">
-    <span class="input-group-text" >Twoje dane:</span>
-    <input type="text" class="form-control form-control-lg" name="name" placeholder="imię i nazwisko">
-    <input type="text" required class="form-control form-control-lg" name="email" placeholder="twój e-mail">
-    <button class="btn btn-success btn-lg" type="submit">Zapisz</button>
   </div>
 </form>

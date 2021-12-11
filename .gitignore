@@ -1,3 +1,5 @@
 *.pass
 *.key
 *.sqlite
+pass.py
+passwords.py

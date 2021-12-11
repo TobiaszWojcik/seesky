@@ -9,6 +9,7 @@ from .models import Positions
 from .custom_calculations import Calculate
 from math import fabs
 
+
 class SpaceObject:
     def __init__(self):
         self.station_list_short = []
@@ -92,7 +93,7 @@ class SpaceObject:
 
 
 class SpaceDB:
-    def __init__(self, p_lat, p_lon, search_range=300, max_delat=15):
+    def __init__(self, p_lat, p_lon, search_range=300, max_delat=25):
         self.max_delat = max_delat
         self.p_lat = float(p_lat)
         self.p_lon = float(p_lon)
@@ -155,13 +156,15 @@ class SpaceDB:
                     if calc.is_betwen(t_lon, o_lon, x_lon):
                         obj_dist = calc.distance(p_lat, p_lon, x_lat, x_lon)
                         # jeśli odległość najbliższa od punktu mniejsza niż ...
-                        if obj_dist < 150:
+                        if obj_dist < 1500:
                             observation_dir = calc.direction(p_lat, p_lon, x_lat, x_lon)
-                            travel_dir = calc.direction(o_lat, o_lon, t_lat, t_lon)
+                            travel_dir = calc.direction(t_lat, t_lon, o_lat, o_lon)
                             obj_speed = calc.distance(o_lat, o_lon, t_lat, t_lon)
                             self.info.append({
-                                'observation_dir': observation_dir,
-                                'obj_dir': travel_dir,
+                                'observation_dir': observation_dir[1],
+                                'observation_dir_angle': observation_dir[0],
+                                'obj_dir': travel_dir[1],
+                                'obj_dir_angle': travel_dir[0],
                                 'obj_speed': obj_speed,
                                 'obj_short': temp_short,
                                 'obj_time': obj.time,

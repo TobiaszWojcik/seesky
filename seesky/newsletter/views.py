@@ -1,13 +1,31 @@
 from datetime import date, timedelta
 from suntime import Sun
 from django.shortcuts import render
-from django.http import HttpResponse
 from .map_finder import NominatimGeocoding
 from .satelite import SpaceObject, SpaceDB
 from .models import SpaceObjects, Positions
-from .forms import NewsletterForm
+from .add_news import NewsletterSave, ValidEmail
+from django.contrib.sites.shortcuts import get_current_site
+
+
+def about_page(request):
+    context = {'title': 'O Projekcie'
+               }
+    return render(request, 'main.html', context)
+
+def contact_page(request):
+    context = {'title': 'Kontak'
+               }
+    return render(request, 'main.html', context)
+
 
 def main_page(request):
+    context = {'title': 'Strona główna',
+               'action': 'show/'}
+    return render(request, 'main.html', context)
+
+
+def show_page(request):
     if request.method == 'POST':
         place = request.POST['place']
     else:
@@ -37,18 +55,39 @@ def newsletter_page(request):
     }
     if request.method == 'POST':
         if request.POST.get('place'):
-            place = request.POST['place']
-            place = NominatimGeocoding(place)
+            place = NominatimGeocoding(request.POST['place'])
             if not place.error:
                 context['error'] = False
                 context['lon'] = place.lon()
                 context['lat'] = place.lat()
                 context['place'] = str(place)
             else:
-                context['error_text'] = 'Niestety nie znaleziono takiego miejsca'
-
+                context['error_text'] = 'Nie znaleziono takiego miejsca'
+        elif request.POST.get('place_name'):
+            newsletter_save = NewsletterSave(request.POST)
+            context['email'] = request.POST['email']
+            site_url = get_current_site(request).domain
+            print(site_url)
+            if newsletter_save.check(site_url):
+                return render(request, 'save.html', context)
+            else:
+                context['error_text'] = newsletter_save.error
+                context['lon'] = request.POST['lon']
+                context['lat'] = request.POST['lat']
+                context['place'] = request.POST['place_name']
+                context['error'] = False
+                context['name'] = request.POST['name']
 
     return render(request, 'newsletter.html', context)
+
+
+def validate(request, email, token):
+    ve = ValidEmail()
+    context = {
+        'title': 'Potwierdzenie',
+        'content': ve.confirm(email, token)
+    }
+    return render(request, 'confirmation.html', context)
 
 
 def actualizacja(request):

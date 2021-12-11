@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DokumentacjaPracownicza>
+    <identyfikatorDokumentacji>wfirma::0385600::eakta::00378627::9D</identyfikatorDokumentacji>
+    <dataEksportu>2021-12-11</dataEksportu>
+    <nazwaPracodawcy>Usługi Gastronomiczne Ludmiła Wójcik</nazwaPracodawcy>
+
+    <pracownik>
+        <nazwisko>Drozd</nazwisko>
+        <imie>Sylwester</imie>
+
+                    <pesel>97123100498</pesel>
+            </pracownik>
+
+    <aktaOsobowe>
+        <identyfikatorDokumentu>wfirma::0385600::dokument::022929510::84</identyfikatorDokumentu>
+        <dataUtworzeniaDokumentu>2021-04-01</dataUtworzeniaDokumentu>
+
+        
+        <rodzajDokumentu>
+                    </rodzajDokumentu>
+    </aktaOsobowe>
+</DokumentacjaPracownicza>

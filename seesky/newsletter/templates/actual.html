@@ -13,13 +13,33 @@
 
 <!--Page Content-->
 {% block content %}
+
+  <div class="text-center pt-5 container">
+
   <br>
-    <h3 class="text-center">{{ content }}</h3>
-  <br>
-  <div class="text-center container">
+    <h3 class="p-3"> Aktualna lista obserwowanych obiektów</h3>
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>Lp.</th>
+        <th>Nazwa Obiektu</th>
+        <th>Skrót</th>
+      </tr>
+      </thead>
       {% for obj in objects%}
-        <p>{{ obj.name }} - {{ obj.short }}</p>
+      <tr>
+        <td>
+          {{ forloop.counter }}
+        </td>
+        <td>
+          {{ obj.name }}
+        </td>
+        <td>
+          {{ obj.short }}
+        </td>
+      </tr>
       {% endfor %}
+    </table>
     {% if user.is_superuser %}
 
       {% include "act_form.html" %}
@@ -27,7 +47,7 @@
 
 
     {% endif %}
-  </div>
+</div>
 {% endblock %}
 <!--Footer-->
 {% block footer %}

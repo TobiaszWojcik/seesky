@@ -16,13 +16,15 @@
 <!--Page Content-->
 {% block content %}
 
-  <div class="text-center container">
-    <h2>Wyszukiwarka satelit</h2>
-    <p>Strona wyszukuje satelity przelatujące w promieniu xxxkm (obecnie 1000km) licząc po powierzchni Ziemi od wybranego miejsca.</p>
+  <div class="text-center container pt-5">
+    <h2 class="p-4">Sprawdź obiekty kosmiczne nad tobą</h2>
+    <p class="fs-4">Strona wyszukuje satelity przelatujące w promieniu 150 km licząc po powierzchni Ziemi od wybranego miejsca.</p>
 
-    <p>Informacje o satelitach są zaczerpnięte z NASA - więcej informacji na ten temat znajdziesz <a href="https://sscweb.gsfc.nasa.gov/">tutaj</a> .</p>
-    <p>Aktualną listę obserwowanych obiektów znajdziesz <a href="/lista">tutuaj</a>. Lista odświerzana jest codziennie o godzinie 12.</p>
-    <p>Obserwacje podawan sę od godziny 12 dnia obecnego do godziny 12 dnia następnego czasu uniwersalnego (UTC).</p>
+    <p class="fs-4">Informacje o satelitach pochodzą z baz danych z nasa NASA - więcej na ten temat znajdziesz <a href="https://sscweb.gsfc.nasa.gov/">tutaj</a> .</p>
+    <p class="fs-4">Aktualną listę obserwowanych obiektów znajdziesz <a href="/lista">tutuaj</a>. Lista odświerzana jest codziennie.</p>
+    <p class="fs-4">Obserwacje podawane są w godzinach od zachodzu do wschodu słońca dla danego miejsca. Wszystkie godziny podawane są w czasie uniwersalnym (UTC) bez uwzględnienia stref czasowych.</p>
+    <p class="fs-4  p3">Aby uzyskać informację wpisz w poniższą wyszukiwarkę nazwę miejsca o którym chcesz dostać informację. </p>
+    <strong><p class="fs-3">Jeśli chcesz dostawać informację codziennie na maila wejdź w zakładkę <a href="{% url 'newsletter_page' %}">newsletter</a></p></strong>
     {% include "search_form.html" %}
   </div>
 {% endblock %}

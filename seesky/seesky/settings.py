@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from .passwords import EMAIL_PASSWORD, EMAIL_PORT, EMAIL_LOGIN, EMAIL_SERVER, EMAIL_TLS, EMAIL_SSL
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'newsletter.apps.NewsletterConfig'
+    'django.contrib.sites.shortcuts',
+    'newsletter.apps.NewsletterConfig',
+
     ]
 
 MIDDLEWARE = [
@@ -129,3 +132,15 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_HOST = EMAIL_SERVER
+EMAIL_PORT = EMAIL_PORT
+EMAIL_HOST_USER = EMAIL_LOGIN
+EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
+EMAIL_USE_SSL = EMAIL_SSL
+EMAIL_USE_TLS = EMAIL_TLS
+
+
+# Celery settings
+
+CELERY_BROKER_URL = 'redis://localhost:6379'

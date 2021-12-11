@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DokumentacjaPracownicza>
+    <identyfikatorDokumentacji>wfirma::0385600::eakta::00446268::ED</identyfikatorDokumentacji>
+    <dataEksportu>2021-12-11</dataEksportu>
+    <nazwaPracodawcy>Usługi Gastronomiczne Ludmiła Wójcik</nazwaPracodawcy>
+
+    <pracownik>
+        <nazwisko>Cichoński</nazwisko>
+        <imie>Patryk</imie>
+
+                    <pesel>98030708694</pesel>
+            </pracownik>
+
+    <aktaOsobowe>
+        <identyfikatorDokumentu>wfirma::0385600::dokument::025526601::75</identyfikatorDokumentu>
+        <dataUtworzeniaDokumentu>2021-08-07</dataUtworzeniaDokumentu>
+
+        
+        <rodzajDokumentu>
+                    </rodzajDokumentu>
+    </aktaOsobowe>
+</DokumentacjaPracownicza>

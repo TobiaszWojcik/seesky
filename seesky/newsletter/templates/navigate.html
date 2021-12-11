@@ -1,10 +1,28 @@
-<div id="nav" class="">
-    <ul class="nav nav-tabs">
-        {% for navi in pages %}
-            <li class="nav-item">
-            <a class="nav-link {{ navi.active }}" href="{{ navi.link }}">{{ navi.page }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+ {% url 'main_page' as main_page %}
+ {% url 'newsletter_page' as newsletter_page %}
+ {% url 'list_page' as list_page %}
+ {% url 'about_page' as about_page %}
+ {% url 'contact_page' as contact_page %}
 
+
+<div class="container-fluid bg-dark">
+     <div class="container nav-justified fs-4">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a href="{{main_page}}" class="link-light nav-link {% if request.path == main_page %} active{% endif %}">Strona Główna</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a href="{{newsletter_page}}" class="link-light nav-link {% if request.path == newsletter_page %} active{% endif %}">Newsletter</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a href="{{list_page}}" class="link-light nav-link {% if request.path == list_page %} active{% endif %}">Lista Obiektów</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a href="{{about_page}}" class="link-light nav-link {% if request.path == about_page %} active{% endif %}">O Projekcie</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a href="{{contact_page}}" class="link-light nav-link {% if request.path == contact_page %} active{% endif %}">Kontakt</a>
+          </li>
+        </ul>
+    </div>
 </div>
