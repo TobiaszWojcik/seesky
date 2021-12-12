@@ -3,6 +3,7 @@ from .models import Newsletter
 from django.db.utils import IntegrityError
 from .email_handler import EmailHandler
 
+
 class ValidEmail:
 
     @staticmethod

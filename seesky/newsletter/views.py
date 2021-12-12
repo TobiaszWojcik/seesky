@@ -2,20 +2,23 @@ from datetime import date, timedelta
 from suntime import Sun
 from django.shortcuts import render
 from .map_finder import NominatimGeocoding
-from .satelite import SpaceObject, SpaceDB
-from .models import SpaceObjects, Positions
+from .models import SpaceObjects
+from .satelite import SpaceDB
 from .add_news import NewsletterSave, ValidEmail
 from django.contrib.sites.shortcuts import get_current_site
 
 
 def about_page(request):
+    print("whatever")
     context = {'title': 'O Projekcie'
                }
     return render(request, 'main.html', context)
 
+
 def contact_page(request):
     context = {'title': 'Kontak'
                }
+
     return render(request, 'main.html', context)
 
 
@@ -100,31 +103,4 @@ def actualizacja(request):
     sobj = SpaceObjects.objects.all()
     context['objects'] = sobj
 
-    if request.user.is_superuser:
-        if request.method == 'POST':
-            sot = SpaceObject()
-            if sot.get_stations():
-                SpaceObjects.objects.all().delete()
-                for row in sot.station_list:
-                    SpaceObjects.objects.create(name=row['name'], short=row['short'])
-                if sot.get_location():
-                    Positions.objects.all().delete()
-                    for row in sot.positions:
-                        Positions.objects.create(
-                                short=row.get('so_id'),
-                                lat=row.get('lat'),
-                                lon=row.get('lon'),
-                                time=row.get('time_s')
-                                )
-
-                    context['content'] = 'Zaktualizowano listę obiektów i pozyje obiektów kosmicznych'
-
-                else:
-                    context['content'] = 'Błąd: Zaktualizowano listę obiektów, nie  zaktualizowano ich pozyji!!'
-
-            else:
-                context['content'] = 'Błąd: Nie udało się pobrać obiektów z serwera NASA!'
-
-        else:
-            context['content'] = 'Zaktualizuj obiekty latające'
     return render(request, 'actual.html', context)

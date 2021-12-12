@@ -16,3 +16,4 @@ sqlparse==0.4.2
 sscws==2.3.8
 suntime==1.2.5
 urllib3==1.26.7
+celery~=5.2.1

@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 from .passwords import EMAIL_PASSWORD, EMAIL_PORT, EMAIL_LOGIN, EMAIL_SERVER, EMAIL_TLS, EMAIL_SSL
 
+from celery.schedules import crontab
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites.shortcuts',
     'newsletter.apps.NewsletterConfig',
+    'django_celery_beat',
 
     ]
 
@@ -144,3 +147,6 @@ EMAIL_USE_TLS = EMAIL_TLS
 # Celery settings
 
 CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_TIMEZONE = 'Europe/Warsaw'
+CELERY_BEAT_SCHEDULE = {
+}

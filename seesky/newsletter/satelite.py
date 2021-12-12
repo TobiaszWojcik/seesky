@@ -40,7 +40,7 @@ class SpaceObject:
     def get_location(self):
         ssc = self.space_class()
 
-        today = datetime.date.strftime(datetime.date.today(), '%Y%m%dT120000Z')
+        today = datetime.date.strftime(datetime.date.today() + datetime.timedelta(days=1), '%Y%m%dT120000Z')
         tomorrow = datetime.date.strftime(datetime.date.today() + datetime.timedelta(days=2), '%Y%m%dT120000Z')
 
         coord_options = [
@@ -104,7 +104,6 @@ class SpaceDB:
         calc = Calculate()
         temp_id = 0
         temp_short = None
-        satind = 1
         max_lat = self.p_lat + self.max_delat
         min_lat = self.p_lat - self.max_delat
         max_lon = self.p_lon + self.max_delat
@@ -156,7 +155,7 @@ class SpaceDB:
                     if calc.is_betwen(t_lon, o_lon, x_lon):
                         obj_dist = calc.distance(p_lat, p_lon, x_lat, x_lon)
                         # jeśli odległość najbliższa od punktu mniejsza niż ...
-                        if obj_dist < 1500:
+                        if obj_dist < 500:
                             observation_dir = calc.direction(p_lat, p_lon, x_lat, x_lon)
                             travel_dir = calc.direction(t_lat, t_lon, o_lat, o_lon)
                             obj_speed = calc.distance(o_lat, o_lon, t_lat, t_lon)
@@ -171,8 +170,6 @@ class SpaceDB:
                                 'obj_dist': obj_dist
 
                             })
-
-                            satind += 1
             else:
                 temp_short = obj.short
             temp_id = obj.id

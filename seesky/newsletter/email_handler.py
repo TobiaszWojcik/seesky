@@ -18,11 +18,24 @@ class EmailHandler:
             fail_silently=False,
         )
 
-    def sign_up_email(self):
+    def newsletter_email(self, obj, sat, sunset, sunrise):
+        message = f'Witaj {obj.name}.\n' \
+                  f'Informacje dla twojego miejsca:\n{obj.place}\n' \
+                  f'Zachód słońca - {sunset}, Wschód słońca{sunrise}\n' \
+                  f'Informacje o obiektach kosmicznych:\n' \
+                  f'{obj.token}'
+
+        for poz in sat:
+            message += f'Obiekt {poz.get("obj_short")} poruszający się w kierunku ' \
+                f'{poz.get("obj_dir")} ({poz.get("obj_dir_angle")}°) z prędkością {poz.get("obj_speed")}km/min.' \
+                f'\nNajbliżej Ciebie obiekt będzie ok {poz.get("obj_time")} (UTC) w kierunku ' \
+                f'{poz.get("observation_dir")} ({poz.get("observation_dir_angle")}°) w odległości ' \
+                f'{poz.get("obj_dist")}km.\n'
+
         send_mail(
-            'Subject here',
-            'Here is the message.',
-            'tbaztw@gmail.com',
-            ['tbaztw@gmail.com'],
+            'Newsletter SeeSky.pl.',
+            message,
+            self.emali,
+            [obj.email],
             fail_silently=False,
         )

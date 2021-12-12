@@ -17,7 +17,8 @@
 {% block content %}
 {% if not place.error %}
   <div class="maps_google">
-  <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d41438.69203622493!2d{{ place.lon }}!3d{{ place.lat }}!3m2!1i1024!2i768!4f5.1!5e0!3m2!1spl!2spl!4v1638465981061!5m2!1spl!2spl" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+  <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d41438.69203622493!2d{{ place.lon }}!3d{{ place.lat }}!3m2!1i1024!2i768!9f4.1!5e0!3m2!1spl!2spl!4v1638465981061!5m2!1spl!2spl"
+          width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
   </div>
   <div class="container">
     <div class="text-center">
@@ -58,7 +59,8 @@
       <b>{{ informacja.obj_speed }}km/min</b>
       <img src="{% static 'obj_tr.png' %}" class="icon_s" style="transform:rotate({{ informacja.obj_dir_angle }}deg)">
       <br>
-      Najbliżej Ciebie obiekt będzie o <b>{{ informacja.obj_time }}</b>(UTC) w kierunku <b>{{ informacja.observation_dir }} ({{ informacja.observation_dir_angle }}°)</b>
+      Najbliżej Ciebie obiekt będzie o <b>{{ informacja.obj_time }}</b>(UTC) w kierunku
+      <b{{ informacja.observation_dir }} ({{ informacja.observation_dir_angle }}°)</b>
       w odległości <b>{{ informacja.obj_dist }}km</b>
 
         <img src="{% static 'obj_view.png' %}" class="icon_s" style="transform:rotate({{ informacja.observation_dir_angle }}deg)">
