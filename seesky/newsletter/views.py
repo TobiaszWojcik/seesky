@@ -12,14 +12,14 @@ def about_page(request):
     print("whatever")
     context = {'title': 'O Projekcie'
                }
-    return render(request, 'main.html', context)
+    return render(request, 'in_progres.html', context)
 
 
 def contact_page(request):
     context = {'title': 'Kontak'
                }
 
-    return render(request, 'main.html', context)
+    return render(request, 'in_progres.html', context)
 
 
 def main_page(request):

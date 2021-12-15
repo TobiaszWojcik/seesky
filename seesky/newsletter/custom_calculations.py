@@ -39,12 +39,12 @@ class Calculate:
         return compass, coord_names[coord_dir]
 
     @staticmethod
-    def is_betwen(min,max,betwen):
-        if max > min:
-            if min < betwen < max:
+    def is_betwen(minimum, maximum, betwen):
+        if maximum > minimum:
+            if minimum < betwen < maximum:
                 return True
-        elif max < min:
-            if min > betwen > max:
+        elif maximum < minimum:
+            if minimum > betwen > maximum:
                 return True
 
         return False

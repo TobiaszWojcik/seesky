@@ -6,6 +6,7 @@ from .satelite import SpaceObject, SpaceDB
 from .email_handler import EmailHandler
 from .models import Newsletter
 
+
 @shared_task
 def reload_space_db():
     sot = SpaceObject()
@@ -22,6 +23,7 @@ def reload_space_db():
                         lon=row.get('lon'),
                         time=row.get('time_s')
                         )
+
 
 @shared_task
 def email_send():
