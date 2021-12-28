@@ -2,11 +2,28 @@ import math
 
 
 class Calculate:
+    """
+    This class is a set of methods to perform some custom calculations needed for a seesky project to function properly
+
+    Methods:
+    * distance - method of calculating distances between two points on the sphere
+    * direction - method of calculating direction in degrees betwene two points on a system of coordinates
+    * is_between - method tell if one point can lie between two other points in coordinate system
+    * prepare - simple custom method returning float and changing values based on parts of a globe
+    """
     def __init__(self):
         self.EARTH_R = 6378137
         self.round = 1000  # 1km
 
-    def distance(self, lat_a, lon_a, lat_b, lon_b):
+    def distance(self, lat_a: float, lon_a: float, lat_b: float, lon_b: float):
+        """
+        method of calculating distances between two points on the sphere
+        :param lat_a: Latitude of first point as float e.g 50,223123
+        :param lon_a: Longitude of first point as float e.g 23,123123
+        :param lat_b: Latitude of second point as float e.g 50,223123
+        :param lon_b: Longitude of second point as float e.g 23,123123
+        :return: float distance in km between two points
+        """
         lat_a = float(lat_a)
         lon_a = float(lon_a)
         lat_b = float(lat_b)
@@ -21,7 +38,15 @@ class Calculate:
         return int((self.EARTH_R * c)/self.round)  # km
 
     @staticmethod
-    def direction(lat_a, lon_a, lat_b, lon_b):
+    def direction(lat_a: float, lon_a: float, lat_b: float, lon_b: float):
+        """
+        method of calculating direction in degrees betwene two points on a system of coordinates
+        :param lat_a: Latitude of first point as float e.g 50,223123
+        :param lon_a: Longitude of first point as float e.g 23,123123
+        :param lat_b: Latitude of second point as float e.g 50,223123
+        :param lon_b: Longitude of second point as float e.g 23,123123
+        :return: method returns list :name of direction as string and int: direction in degree
+        """
         lat_a = float(lat_a)
         lon_a = float(lon_a)
         lat_b = float(lat_b)
@@ -39,18 +64,33 @@ class Calculate:
         return compass, coord_names[coord_dir]
 
     @staticmethod
-    def is_betwen(minimum, maximum, betwen):
+    def is_between(minimum: float, maximum: float, between: float):
+        """
+        method tell if one point can lie between two other points in coordinate system
+        :param minimum: float: first point
+        :param maximum: float: second point
+        :param between: float: point which you want to check
+        :return: boolean
+        """
         if maximum > minimum:
-            if minimum < betwen < maximum:
+            if minimum <= between <= maximum:
                 return True
         elif maximum < minimum:
-            if minimum > betwen > maximum:
+            if minimum >= between >= maximum:
                 return True
 
         return False
 
     @staticmethod
     def prepare(place_lon, place_lat, obj_lon, obj_lat):
+        """
+        simple custom method returning float and changing values based on parts of a globe
+        :param place_lon:
+        :param place_lat:
+        :param obj_lon:
+        :param obj_lat:
+        :return:
+        """
         place_lon = float(place_lon)
         place_lat = float(place_lat)
         obj_lon = float(obj_lon)

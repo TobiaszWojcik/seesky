@@ -93,7 +93,14 @@ class SpaceObject:
 
 
 class SpaceDB:
-    def __init__(self, p_lat, p_lon, search_range=300, max_delat=25):
+    def __init__(self, p_lat: float, p_lon: float, search_range=300, max_delat=25):
+        """
+        this class handles all searches of the right points of interest from the database
+        :param p_lat: latitude of place that we are interested of
+        :param p_lon: longitude of place that we are interested of
+        :param search_range: distance from the point we want to look for objects
+        :param max_delat: distance from the point in degree we want to take information from database
+        """
         self.max_delat = max_delat
         self.p_lat = float(p_lat)
         self.p_lon = float(p_lon)
@@ -101,6 +108,12 @@ class SpaceDB:
         self.info = []
 
     def get_info(self, sunset, sunrise):
+        """
+        method give all info about space objects
+        :param sunset: datetime of sunset in point
+        :param sunrise: datetime of sunrise in point
+        :return: list of dicts
+        """
         calc = Calculate()
         temp_id = 0
         temp_short = None
@@ -151,8 +164,8 @@ class SpaceDB:
                 x_lat = (d_b - f_b) / (f_a - d_a)
                 x_lon = f_a * x_lat + f_b
                 # jaśli najbliższy pkt leży pomiędzy odczytami to wykonaj...
-                if calc.is_betwen(t_lat, o_lat, x_lat):
-                    if calc.is_betwen(t_lon, o_lon, x_lon):
+                if calc.is_between(t_lat, o_lat, x_lat):
+                    if calc.is_between(t_lon, o_lon, x_lon):
                         obj_dist = calc.distance(p_lat, p_lon, x_lat, x_lon)
                         # jeśli odległość najbliższa od punktu mniejsza niż ...
                         if obj_dist < 500:

@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 from suntime import Sun
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .map_finder import NominatimGeocoding
 from .models import SpaceObjects
 from .satelite import SpaceDB
@@ -72,6 +72,7 @@ def newsletter_page(request):
             site_url = get_current_site(request).domain
             print(site_url)
             if newsletter_save.check(site_url):
+                # return redirect('newsletter', context)
                 return render(request, 'save.html', context)
             else:
                 context['error_text'] = newsletter_save.error
