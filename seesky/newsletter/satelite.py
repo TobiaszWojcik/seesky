@@ -11,16 +11,22 @@ from math import fabs
 
 
 class SpaceObject:
+    """
+    Class responsible for retrieving information about space objects
+    """
     def __init__(self):
         self.station_list_short = []
         self.station_list = []
         self.positions = []
         self.space_class = SscWs
-        self.period = 1  # czas odstępu pomiędzy pomiarami satelit w minutach
+        self.period = 1  # time in seconds between information of location.
 
-# Metoda pobiera informację o satelitach i zwraca tylko te które aktualnie w kosmosie
 
     def get_stations(self):
+        """
+        Method takes information about satellites and returns only those that are currently in space.
+        :return: boolean of success
+        """
         obserwatory = self.space_class()
         obs = obserwatory.get_observatories()
         if obs['HttpStatus'] == 200:
@@ -35,13 +41,16 @@ class SpaceObject:
         else:
             return False
 
-# Metoda pobiera pozycję satelit pobranych w metodzie get_stations w określonych przedziałach czasowych
 
-    def get_location(self):
+    def get_location(self, start=1):
+        """
+        :param start: difference from which day the information about the objects is collected.
+        :return: True if success else False
+        """
         ssc = self.space_class()
 
-        today = datetime.date.strftime(datetime.date.today() + datetime.timedelta(days=1), '%Y%m%dT120000Z')
-        tomorrow = datetime.date.strftime(datetime.date.today() + datetime.timedelta(days=2), '%Y%m%dT120000Z')
+        today = datetime.date.strftime(datetime.date.today() + datetime.timedelta(days=start), '%Y%m%dT120000Z')
+        tomorrow = datetime.date.strftime(datetime.date.today() + datetime.timedelta(days=start+1), '%Y%m%dT120000Z')
 
         coord_options = [
                 FilteredCoordinateOptions(CoordinateSystem.GEO, CoordinateComponent.LAT),
@@ -95,7 +104,7 @@ class SpaceObject:
 class SpaceDB:
     def __init__(self, p_lat: float, p_lon: float, search_range=300, max_delat=25):
         """
-        this class handles all searches of the right points of interest from the database
+        This class handles all searches of the right points of interest from the database.
         :param p_lat: latitude of place that we are interested of
         :param p_lon: longitude of place that we are interested of
         :param search_range: distance from the point we want to look for objects
@@ -109,7 +118,7 @@ class SpaceDB:
 
     def get_info(self, sunset, sunrise):
         """
-        method give all info about space objects
+        Method give all info about space objects.
         :param sunset: datetime of sunset in point
         :param sunrise: datetime of sunrise in point
         :return: list of dicts

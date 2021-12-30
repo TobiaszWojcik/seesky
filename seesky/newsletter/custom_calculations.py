@@ -17,7 +17,7 @@ class Calculate:
 
     def distance(self, lat_a: float, lon_a: float, lat_b: float, lon_b: float):
         """
-        method of calculating distances between two points on the sphere
+        Method of calculating distances between two points on the sphere.
         :param lat_a: Latitude of first point as float e.g 50,223123
         :param lon_a: Longitude of first point as float e.g 23,123123
         :param lat_b: Latitude of second point as float e.g 50,223123
@@ -40,7 +40,7 @@ class Calculate:
     @staticmethod
     def direction(lat_a: float, lon_a: float, lat_b: float, lon_b: float):
         """
-        method of calculating direction in degrees betwene two points on a system of coordinates
+        Method of calculating direction in degrees betwene two points on a system of coordinates.
         :param lat_a: Latitude of first point as float e.g 50,223123
         :param lon_a: Longitude of first point as float e.g 23,123123
         :param lat_b: Latitude of second point as float e.g 50,223123
@@ -66,7 +66,7 @@ class Calculate:
     @staticmethod
     def is_between(minimum: float, maximum: float, between: float):
         """
-        method tell if one point can lie between two other points in coordinate system
+        Method tell if one point can lie between two other points in coordinate system.
         :param minimum: float: first point
         :param maximum: float: second point
         :param between: float: point which you want to check

@@ -29,12 +29,13 @@ To run this project:
 *instal locally all required libraries (all in requirements.txt file)
 *provide the variables for smtp email serwer, redis serwer, celery (all variables ar in seesky/settings.py path)
 #### email settings
-* EMAIL_HOST = EMAIL_SERVER
-* EMAIL_PORT = EMAIL_PORT 
-* EMAIL_HOST_USER = EMAIL_LOGIN
-* EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
-* EMAIL_USE_SSL = EMAIL_SSL (True/False)
-* EMAIL_USE_TLS = EMAIL_TLS (True/False)
+* EMAIL_ADDRESS = [EMAIL_ADDRESS]
+* EMAIL_HOST = [EMAIL_SERVER]
+* EMAIL_PORT = [EMAIL_PORT] 
+* EMAIL_HOST_USER = [EMAIL_LOGIN]
+* EMAIL_HOST_PASSWORD = [EMAIL_PASSWORD]
+* EMAIL_USE_SSL = [True/False]
+* EMAIL_USE_TLS = [True/False]
   (only one can by True!)
 #### celery/redis settings
 * CELERY_BROKER_URL = e.g.('redis://localhost:6379')
@@ -42,5 +43,28 @@ To run this project:
 
 if run without debug mode !!
 * ALLOWED_HOSTS = []
+
+#### start celery
+```
+celery -A seesky.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+celery -A seesky.celery worker --loglevel=info
+```
+#### run serwer
+
+in folder with manager.py file run
+```
+python manager.py runserver
+```
+more in django documentation
+
+#### first database entries
+because the database of objects is downloaded periodically and the data is downloaded one day ahead, you should download the data manually using class **seesky.newsletter.satelite.SpaceObject** to see any information of search results
+or go to **/admin** site in tab **PERIODIC TASKS** go to **Periodic tasks** add periodic task "reload_space_db_first_time" and run it only ones. (mark One-off Task)
+
+#### periodic tasks
+In admin panel in tab **PERIODIC TASKS** go to **Periodic tasks** add periodic task:
+- **email_send** - repetition period every hour
+- **reload_space_db** - repetition period every day at a specific time (e.g 12:00)
+
 
 

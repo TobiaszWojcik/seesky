@@ -8,6 +8,11 @@ from .add_news import NewsletterSave, ValidEmail
 from django.contrib.sites.shortcuts import get_current_site
 
 
+"""
+Module for handling subpage view.
+"""
+
+
 def about_page(request):
     print("whatever")
     context = {'title': 'O Projekcie'

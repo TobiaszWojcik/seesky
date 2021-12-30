@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-from .passwords import EMAIL_PASSWORD, EMAIL_PORT, EMAIL_LOGIN, EMAIL_SERVER, EMAIL_TLS, EMAIL_SSL
+# from .passwords import EMAIL_PASSWORD, EMAIL_PORT, EMAIL_LOGIN, EMAIL_SERVER, EMAIL_TLS, EMAIL_SSL, EMAIL_ADDRESS
 
 from celery.schedules import crontab
 
@@ -136,6 +136,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+EMAIL_ADDRESS = EMAIL_ADDRESS
 EMAIL_HOST = EMAIL_SERVER
 EMAIL_PORT = EMAIL_PORT
 EMAIL_HOST_USER = EMAIL_LOGIN

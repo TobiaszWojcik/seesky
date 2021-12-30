@@ -1,6 +1,9 @@
 from django.urls import path
 from . import views
 
+"""
+Module for handling individual subpage addresses.
+"""
 urlpatterns = [
     path('', views.main_page, name='main_page'),
     path('newsletter/', views.newsletter_page, name='newsletter_page'),
